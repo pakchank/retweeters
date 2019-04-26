@@ -1,6 +1,9 @@
 # retweeters
 This project pull retweets from Twitter Streaming API, and feed the retweeters' information to Twitter Search API to evaluate their ideology.
 
+# To-do's
+- Move the project to a new VM
+
 # 1. Scraping Retweets
 - `scraper.py`: Scrape retweets from Twitter Streaming API
 - `private.py`: (Private setting) Twitter API credential for scraping
