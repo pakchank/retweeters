@@ -2,6 +2,8 @@
 import csv
 import time
 import subprocess
+import botometer
+from botometer_settings import *
 from mySQL_connector import *
 from pathlib import Path
 
@@ -27,14 +29,16 @@ while True:
     # Look up retweeter.csv here
 
     screen_names = [retweeter for retweeter in  screen_names if retweeter not in retweeters]
+    screen_names = ['@' + retweeter for retweeter in screen_names]
 
-    # Get ideology from R code.  
-    print("Rscript --vanilla eval_ideo.R {}".format(" ".join(screen_names)))
-    subprocess.call("Rscript --vanilla eval_ideo.R {}".format(" ".join(screen_names)), shell=True)
-    # Should be something like "x = subprocess.check_output(cmd, universal_newlines=True)
-    
-    ## Then, how do I get the results? as dic {"users_name": "score", ...}
-    
+    bom = botometer.Botometer(wait_on_ratelimite=True,
+                            mashape_key=mashape_key,
+                            **twitter_app_auth)
+
+    for screen_name, result in bom.check_accounts_in(screen_names):
+        print(screen_name)
+        print(result)
+   
     #dict_score = dict()
     #for user, score in some_results.items():
     #    dict_score[user] = score
