@@ -5,13 +5,17 @@ import subprocess
 from mySQL_connector import *
 from pathlib import Path
 
+with open('retweeter_ideo.csv', 'w') as f:
+    writer = csv.writer(f)
+    writer.writerow(["user","mean_ideo"])
+
 conn = create_cnx()
 c = create_cursor(conn)
 
 i = 0
 while True:
     i += 15
-    c.execute("SELECT user_name FROM xudong LIMIT 15")
+    c.execute("SELECT user_name FROM xudong LIMIT 7")
     #c.execute("SELECT user FROM database WHERE num >=  {} AND num <= {}".format(str(i-14), str(i)))
          
     screen_names = [row[0] for row in c]
@@ -33,16 +37,6 @@ while True:
     subprocess.call("Rscript --vanilla eval_ideo.R {}".format(" ".join(screen_names)), shell=True)
     # Should be something like "x = subprocess.check_output(cmd, universal_newlines=True)
     
-    ## Then, how do I get the results? as dic {"users_name": "score", ...}
-    
-    #dict_score = dict()
-    #for user, score in some_results.items():
-    #    dict_score[user] = score
-
-    #with open("reteeter.csv", mode='a') as f:
-    #    for user, score in dict_score.items():
-    #        f.write(user, score)
-
     print(screen_names)
 
     time.sleep(15 * 60)
