@@ -1,9 +1,12 @@
 #!/usr/bin/env Rscript
 
-users = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 
-if (length(args) == 0) {
-  stop("At least one user should be provided as an argument.", call.=FALSE)
+users <- args[1]
+api_key <- args[2]
+
+if (length(args) < 2) {
+  stop("At least one user and API key identifer should be provided as an argument.", call.=FALSE)
 } else if (length(args) > 15) {
   stop("Twitter API can't handle more than 15 users.")
 }
@@ -11,9 +14,19 @@ if (length(args) == 0) {
 library(tweetscores)
 source("eval_ideo_settings.R")
 
+# my_oauth <- get()
+
 estimates <- list()
 
-print(users)
+my_oauth <- get(api_key)
+limit <- tweetscores:::getLimitFriends(my_oauth = tweetscores:::getOAuth(my_oauth, verbose = verbose))
+
+if (limit < 2) {
+    print(paste(api_key, " is going to sleep for 16 mins."))
+    Sys.sleep(60 * 16)
+}
+
+#print(users)
 
 for (user in users){
     cat(paste("Fetching the friend list of", user))
@@ -38,8 +51,8 @@ for (user in users){
              },
              error = function(cond){
                  message(cond)
+                 sys.sleep(60 * 15)
              })
 }
 
-# How to return...?
 

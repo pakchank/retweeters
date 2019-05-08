@@ -32,14 +32,13 @@ while True:
 
     screen_names = [retweeter for retweeter in  screen_names if retweeter not in retweeters]
 
+    print("Retrieving ideology scores of :" + ", ".join(screen_names))
     # Get ideology from R code.  
     print("Rscript --vanilla eval_ideo.R {}".format(" ".join(screen_names)))
     subprocess.call("Rscript --vanilla eval_ideo.R {}".format(" ".join(screen_names)), shell=True)
     # Should be something like "x = subprocess.check_output(cmd, universal_newlines=True)
-    
-    print(screen_names)
 
-    time.sleep(15 * 60)
+    #time.sleep(15 * 60)
        
     #if exceed limits, stop! import error from twwweee
     
